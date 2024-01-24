@@ -1,0 +1,2 @@
+https://www.linode.com/docs/guides/how-to-install-chef-on-ubuntu-20-04/
+
