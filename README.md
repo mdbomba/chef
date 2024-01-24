@@ -1,4 +1,4 @@
-This repo will hold work I am going related to automating the installation of Chef Workstation and Chef Server. 
+This repo will hold work related to automating the installation of Chef Workstation and Chef Server. 
 
 Chef Server installs will use the Chef Automate process (download chef-automate installer and use the -products 
 command line options to include Chef Infra Server, Chef Habitat Builder and Chef Automate Server. 
