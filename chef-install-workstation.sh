@@ -7,6 +7,9 @@ echo 'This script will install git, Visual Studio code and Chef Workstation'
 echo "Version = $version"
 echo '#####################################################################'
 echo ''
+
+cd ~
+
 STAMP=$(date +"_%Y%j%H%M%S")
 DEB=$(echo $CHEF_WORKSTATION_DOWNLOAD_URL | cut -d '/' -f 10)
 

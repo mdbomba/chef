@@ -9,6 +9,8 @@ echo "Version = $version"
 echo '######################################################################'
 echo ''
 
+cd ~
+
 STAMP=$(date +"_%Y%j%H%M%S")
 
 # CHECK AND LOAD PASSWORD IF NOT ALREADY DEFINED
