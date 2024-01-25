@@ -1,33 +1,47 @@
 # Version 2024-01-08-10:07
 # Install Chef Workstation on dedicated server
-
-GIT_USER='mdbomba'
-GIT_EMAIL='mbomba@kemptechnologies.com'
-REPO='chef_demo'
-NAME='chef-workstation'
-URL="https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb"
-DEB=$(echo $URL | cut -d '/' -f 10)
+version='2024-01-24'
+echo ''
+echo '#####################################################################'
+echo 'This script will install git, Visual Studio code and Chef Workstation'
+echo "Version = $version"
+echo '#####################################################################'
+echo ''
 STAMP=$(date +"_%Y%j%H%M%S")
-WORKSTATION_IP='10.0.0.6'
-WORKSTATION_NAME='chef-workstation'
-AUTOMATE_IP='10.0.0.7'
-AUTOMATE_NAME='chef-automate'
+DEB=$(echo $CHEF_WORKSTATION_DOWNLOAD_URL | cut -d '/' -f 10)
 
-sudo hostnamectl set-hostname "$WORKSTATION_NAME"
-
-if ! grep -q "$WORKSTATION_IP" /etc/hosts 
-  then 
-    sudo echo "$WORKSTATION_IP  $WORKSTATION_NAME" | sudo tee -a /etc/hosts
+# CHECK AND LOAD PASSWORD IF NOT ALREADY DEFINED
+if [ "x$CHEF_ADMIN_PASSWORD" = "x" ] 
+  then
+    newValue=''
+    read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " newValue
+    CHEF_ADMIN_PASSWORD="$newValue"
 fi
 
+# SET HOSTNAME
+sudo hostnamectl set-hostname "$CHEF_WORKSTATION_NAME"
 
-if ! grep -q "$AUTOMATE_IP" /etc/hosts
+# UPDATE HOSTS FILE (not needed if you put this into a DNS server)
+sudo cp /etc/hosts "/etc/hosts$STAMP"
+if ! grep -q "$CHEF_WORKSTATION_IP" /etc/hosts 
+  then 
+    sudo echo "$CHEF_WORKSTATION_IP  $CHEF_WORKSTATION_NAME $CHEF_WORKSTATION_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
+fi
+
+if ! grep -q "$CHEF_AUTOMATE_IP" /etc/hosts
   then
-    sudo echo "$AUTOMATE_IP  $AUTOMATE_NAME" | sudo tee -a /etc/hosts
- fi
+    sudo echo "$CHEF_AUTOMATE_IP  $CHEF_AUTOMATE_NAME $CHEF_AUTOMATE_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
+fi
 
+if ! grep -q "$CHEF_NODE1_IP" /etc/hosts
+  then
+    sudo echo "$CHEF_NODE1_IP  $CHEF_NODE1_NAME $CHEF_NODE1_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
+fi
+
+# Install curl
 sudo apt install curl -y
 
+# Configure curl to use TLS1.2 or higher
 if [ -f ~/.curlrc ]
   then
     echo '--tls1.2' | tee -a ~/.curlrc
@@ -35,18 +49,24 @@ if [ -f ~/.curlrc ]
     echo '--tls1.2' > ~/.curlrc
 fi
 
+# Install tree (pretty version of "ls -lr" command )
 sudo apt install tree -y
 
+# Install gzip
 sudo apt install gzip -y
 
+# Install git
 sudo apt install git -y
 
-git config --global user.name "$GIT_USER"
+# Congigure git
+git config --global user.name "$CHEF_GIT_USER"
 
-git config --global user.email "$GIT_EMAIL"
+git config --global user.email "$CHEF_GIT_EMAIL"
 
+# Install additional tools
 sudo apt install software-properties-common apt-transport-https wget -y
 
+# Add Repo for Microsoft Visual Studio Code
 if [ -f /usr/share/keyrings/vscode.gpg ]
   then
     :
@@ -59,25 +79,39 @@ if [ -f /etc/apt/sources.list.d/vscode.list ]
   then
     :
   else
-    echo "################################## ADDING VISUAL STUDIO CODE REPOSITORY TO APT STORE ###########################"
-    echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+    echo "################################## ADDING VISUAL STUDIO CODE GIT_REPOSITORY TO APT STORE ###########################"
+    echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/GIT_REPOs/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
     sudo apt update
 fi
 
+# Install Visual Studio Code
 sudo apt install code -y                                                     ; # Install Visual Studio Code
 
 sudo apt update
 
-sudo wget "$URL"                                                             ; # Download Chef Workstation package
+# Download Chef Workstation deb install package
+sudo wget "$CHEF_WORKSTATION_DOWNLOAD_URL"                                   ; # Download Chef Workstation package
 
+# Install Chef Workstation
 sudo dpkg -i "$DEB"                                                          ; # Install Chef Workstation
 
-chef generate repo "$REPO"                                                   ; # Create first chef repo 
+# Create git repo for Chef Workstation
+chef generate GIT_REPO "$CHEF_GIT_REPO"                                           ; # Create first chef GIT_REPO 
 
-echo ".chef" > "$HOME/$REPO/.gitignore"                                      ; # Ensure git processes does not sync 
+echo ".chef" > "$HOME/$CHEF_GIT_REPO/.gitignore"                                  ; # Ensure git processes does not sync 
 
 echo 'export PATH="/opt/chef-workstation/embedded/bin:$PATH"' >> ~/.bashrc   ; # Ensure bash PATH is updated permanently
 
 source ~/.bashrc                                                             ; # Import new PATH into current bash session
 
+echo ''
+echo '#######################################################'
+echo "Chef Workstation has been installed"
+echo "Please exit and reopen bash shell"
+echo 'This will refresh the $PATH environmental variable'
+echo '#######################################################'
+echo ''
+read -p "Press any key to continue" newValue
+
+exit
 

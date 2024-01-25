@@ -4,8 +4,11 @@ chef-load-params-version='20240121'
 #
 # This script loads environmental variables related to Chef
 #
+echo ''
+echo '##############################################################################################################'
 echo 'This script will prompt for and load environmental variables related to the insallation and operations of Chef'
 echo "Version = $load-params-version"
+echo '##############################################################################################################'
 echo ''
 #
 # Create function to set environment variables for Chef installs
@@ -27,9 +30,10 @@ loadEnvironment() {
 }
 
 # ENTER ENVIRONMENTAL VARIABLES FOR CHEF INSTALLATION (saves to ~/.bashrc)
-echo '###############################################'
+echo ''
+echo '#######################################################'
 echo "Below is a list of Chef Environmental Variables"
-echo '###############################################'
+echo '#######################################################'
 echo ''
 loadEnvironment 'CHEF_ADMIN_ID' 'mike'                          ; # Collect Chef admin login id
 loadEnvironment 'CHEF_ADMIN_FIRST' 'Mike'                       ; # Collect Chef admin first name
@@ -44,13 +48,29 @@ loadEnvironment 'CHEF_NODE1_NAME' 'chef-node1'                  ; # Collect Chef
 loadEnvironment 'CHEF_NODE1_IP' '10.0.0.7'                      ; # Collect Chef Node 1 IP address
 loadEnvironment 'CHEF_ORG' 'chef-demo'                          ; # Collect Chef Organization short name (lowercase)
 loadEnvironment 'CHEF_ORG_LONG' 'Chef Demo Organization'        ; # Collect Chef Organization long name
+loadEnvironment 'CHEF_ADMIN_PASSWORD' 'ChedDemoPass'            ; # Collect password for Chef Admin account (if left blank the install script for workstation/automate will prompt for value)
+loadEnvironment "CHEF_GIT_EMAIL" "mbomba@kemptechnologies.com"  ; # Collect info to configure git on Chef Workstation
+loadEnvironment 'CHEF_GIT_USER' 'mdbomba'                       ; # Collect info to configure git on Chef Workstation
+loadEnvironment 'CHEF_GIT_REPO' 'chef-demo'                     ; # Collect info to configure git on Chef Workstation
 
-newValue=''
-read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " newValue
+loadEnvironment 'CHEF_WORKSTATION_DOWNLOAD_URL' "https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb"
+loadEnvironment 'CHEF_AUTOMATE_DOWNLOAD_URL' 'https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip'
+
 export CHEF_ADMIN_PASSWORD=$newValue
-sed "/CHEF_ADMIN_PASSWORD/d" ~/.bashrc | tee ~/out1 >> /dev/null ; cp ~/out1 ~/.bashrc
-echo "export CHEF_ADMIN_PASSWORD=""'""$newValue""'" >> ~/.bashrc
+# sed "/CHEF_ADMIN_PASSWORD/d" ~/.bashrc | tee ~/out1 >> /dev/null ; cp ~/out1 ~/.bashrc
+# echo "export CHEF_ADMIN_PASSWORD=""'""$newValue""'" >> ~/.bashrc
 
 . ~/.bashrc
+
+echo ''
+echo '#######################################################'
+echo "Parameters have been loaded into ~/.bashrc "
+echo "Please exit and reopen bash shell"
+echo 'Parameters will be available as environmental variables'
+echo '#######################################################'
+echo ''
+read -p "Press any key to continue" newValue
+
+exit
 
 
