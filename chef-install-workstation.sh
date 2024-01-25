@@ -40,6 +40,12 @@ if ! grep -q "$CHEF_NODE1_IP" /etc/hosts
   then
     sudo echo "$CHEF_NODE1_IP  $CHEF_NODE1_NAME $CHEF_NODE1_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
 fi
+echo ''
+
+# Adjust $PATH amdn make change permanent
+export PATH="/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:$PATH" 
+echo 'export PATH="/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:$PATH"' >> ~/.bashrc   ; # Ensure bash PATH is updated permanently
+
 
 # Install curl
 sudo apt install curl -y
@@ -92,6 +98,8 @@ sudo apt install code -y                                                     ; #
 
 sudo apt update
 
+source ~/.bashrc                                                             ; # Import new PATH into current bash session
+
 # Download Chef Workstation deb install package
 sudo wget "$CHEF_WORKSTATION_DOWNLOAD_URL"                                   ; # Download Chef Workstation package
 
@@ -99,13 +107,7 @@ sudo wget "$CHEF_WORKSTATION_DOWNLOAD_URL"                                   ; #
 sudo dpkg -i "$DEB"                                                          ; # Install Chef Workstation
 
 # Create git repo for Chef Workstation
-chef generate GIT_REPO "$CHEF_GIT_REPO"                                           ; # Create first chef GIT_REPO 
-
-echo ".chef" > "$HOME/$CHEF_GIT_REPO/.gitignore"                                  ; # Ensure git processes does not sync 
-
-echo 'export PATH="/opt/chef-workstation/embedded/bin:$PATH"' >> ~/.bashrc   ; # Ensure bash PATH is updated permanently
-
-source ~/.bashrc                                                             ; # Import new PATH into current bash session
+chef generate repo "$CHEF_GIT_REPO"                                           ; # Create first chef GIT_REPO 
 
 echo ''
 echo '#######################################################'
