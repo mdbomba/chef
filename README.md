@@ -11,3 +11,11 @@ normally reads (e.g. config.toml). They will aslo be used in the chef-install-wo
 scripts. 
 
 It is recommended you create or have available a github account before running the install scripts. 
+
+Step 1 Build 2 x Ubuntu 22 server and 1 x Ubuntu 22 workstation
+Step 2 Download this repo to the server and workstation
+Step 3 Edit the chef-load-params.sh script to set values for your organization (on both server and workstation)
+Step 4 Run chef-load-params.sh script on both workstation and server
+Step 5 Run chef-install-automate.sh on Ubuntu server
+Step 6 Run chef-install-workstation.sh on Ubuntu workstation (Ubuntu server also works well as a chef-workstation)
+
