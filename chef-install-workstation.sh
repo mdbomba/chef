@@ -32,6 +32,12 @@ if ! grep -q "$CHEF_NODE1_IP" /etc/hosts
   then
     sudo echo "$CHEF_NODE1_IP  $CHEF_NODE1_NAME $CHEF_NODE1_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
 fi
+
+if ! grep -q "$CHEF_NODE2_IP" /etc/hosts
+  then
+    sudo echo "$CHEF_NODE2_IP  $CHEF_NODE2_NAME $CHEF_NODE2_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
+fi
+
 echo ''
 
 # Adjust $PATH and make change permanent

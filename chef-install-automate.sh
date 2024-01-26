@@ -43,6 +43,11 @@ if ! grep -q "$CHEF_NODE1_IP" /etc/hosts
     echo "$CHEF_NODE1_IP  $CHEF_NODE1_NAME $CHEF_NODE1_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
 fi
 
+if ! grep -q "$CHEF_NODE2_IP" /etc/hosts
+  then
+    echo "$CHEF_NODE2_IP  $CHEF_NODE2_NAME $CHEF_NODE2_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
+fi
+
 # Install curl and wget
 sudo apt install curl wget -y
 
