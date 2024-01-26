@@ -93,19 +93,27 @@ sudo ./chef-automate init-config
 # Install builder, automate and infra server 
 sudo ./chef-automate deploy --product builder --product automate --product infra-server
 
+# Init shell for Ruby and path changes
+
+echo 'eval "$(chef shell-init bash)"' >> ~/.bashrc
+sudo chef shell-init bash
+
 if [ -f "./$CHEF-SERVER-ADMIN.pem" ]
   then
     :
   else
-  sudo chef-server-ctl user-create "$CHEF-ADMIN-ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF-ADMIN-PASSWORD" --filename "$CHEF-ADMIN-ID.pem"
+  sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF-ADMIN-PASSWORD" --filename "$CHEF_ADMIN_ID.pem"
 fi
 
 if [ -f "./$CHEF_ORG-validator.pem" ]
   then
     :
   else
-    sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHED_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
+    sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
 fi
+
+
+
 
 echo ''
 echo '##############################################################################'
