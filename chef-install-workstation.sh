@@ -66,6 +66,9 @@ git config --global user.name "$CHEF_GIT_USER"
 
 git config --global user.email "$CHEF_GIT_EMAIL"
 
+# Ensure openssh-server is installed
+sudo git install openssh-server
+
 # Install additional tools
 sudo apt install software-properties-common apt-transport-https wget -y
 

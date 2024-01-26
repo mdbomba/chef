@@ -63,6 +63,9 @@ sudo apt install gzip -y
 # Install git
 sudo apt install git -y
 
+# Ensure openssh-server is installed
+sudo git install openssh-server
+
 # Configure git
 git config --global user.name "$CHEF_GIT_USER"
 git config --global user.email "$CHEF_GIT_EMAIL"
