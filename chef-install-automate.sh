@@ -13,17 +13,17 @@ cd ~
 
 STAMP=$(date +"_%Y%j%H%M%S")
 
-# CHECK AND LOAD PASSWORD IF NOT ALREADY DEFINED
-if [ "x$CHEF_ADMIN_PASSWORD" = "x" ] 
+# CHECK AND LOAD CHEF ADMIN USER PASSWORD IF NOT ALREADY DEFINED
+if [ "x$CHEF-ADMIN-PASSWORD" = "x" ] 
   then
     newValue=''
     echo 'Chef Server created user accounts seperate from the linux OS accounts'
-    read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " newValue
-    CHEF_ADMIN_PASSWORD="$newValue"
+    read -p  "Enter password for Chef Admin Account ($CHEF-SERVER-ADMIN): " newValue
+    CHEF-ADMIN-PASSWORD="$newValue"
 fi
 
 # Set hostname
- sudo hostnamectl set-hostname "$CHEF_AUTOMATE_NAME"
+ sudo hostnamectl set-hostname "$CHEF_SERVER_NAME"
 
 # Update hosts file (not needed if DNS holds these values)
 
@@ -33,9 +33,9 @@ if ! grep -q "$CHEF_WORKSTATION_IP" /etc/hosts
     echo "$CHEF_WORKSTATION_IP  $CHEF_WORKSTATION_NAME $CHEF_WORKSTATION_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
 fi
 
-if ! grep -q "$CHEF_AUTOMATE_IP" /etc/hosts
+if ! grep -q "$CHEF_SERVER_IP" /etc/hosts
   then
-    echo "$CHEF_AUTOMATE_IP  $CHEF_AUTOMATE_NAME $CHEF_AUTOMATE_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
+    echo "$CHEF_SERVER_IP  $CHEF_SERVER_NAME $CHEF_SERVER_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
 fi
 
 if ! grep -q "$CHEF_NODE1_IP" /etc/hosts
@@ -93,11 +93,11 @@ sudo ./chef-automate init-config
 # Install builder, automate and infra server 
 sudo ./chef-automate deploy --product builder --product automate --product infra-server
 
-if [ -f "./$CHEF_ADMIN_ID.pem" ]
+if [ -f "./$CHEF-SERVER-ADMIN.pem" ]
   then
     :
   else
-  sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF_ADMIN_PASSWORD" --filename "$CHEF_ADMIN_ID.pem"
+  sudo chef-server-ctl user-create "$CHEF-ADMIN-ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF-ADMIN-PASSWORD" --filename "$CHEF-ADMIN-ID.pem"
 fi
 
 if [ -f "./$CHEF_ORG-validator.pem" ]

@@ -35,7 +35,7 @@ echo "Below is a list of Chef Environmental Variables"
 echo '#######################################################'
 echo ''
 
-loadEnvironment 'CHEF_DOMAINNAME' 'localhost'                    ; # Collect domain name for Chef environment
+loadEnvironment 'CHEF_DOMAINNAME' 'localhost'                   ; # Collect domain name for Chef environment
 
 loadEnvironment 'CHEF_ORG' 'chef-demo'                          ; # Collect Chef Organization short name (lowercase)
 loadEnvironment 'CHEF_ORG_LONG' 'Chef Demo Organization'        ; # Collect Chef Organization long name
@@ -44,6 +44,7 @@ loadEnvironment 'CHEF_ADMIN_ID' 'mike'                          ; # Collect Chef
 loadEnvironment 'CHEF_ADMIN_FIRST' 'Mike'                       ; # Collect Chef admin first name
 loadEnvironment 'CHEF_ADMIN_LAST' 'Bomba'                       ; # Collect Chef admin last name
 loadEnvironment 'CHEF_ADMIN_EMAIL' 'mike.bomba@progress.com'    ; # Collect Chef admin email
+# loadEnvironment 'CHEF_ADMIN_PASSWORD' ''                      ; # Collect Chef Admin User Password (if empty, chef-install-automate.sh will prompt for value)
 
 loadEnvironment 'CHEF_WORKSTATION_NAME' 'mike-mint'             ; # Collect Chef Workstation name (lowercase)
 loadEnvironment 'CHEF_WORKSTATION_IP' '192.168.56.1'            ; # Collect Chef Workstation IP address

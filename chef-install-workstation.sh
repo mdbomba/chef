@@ -23,9 +23,9 @@ if ! grep -q "$CHEF_WORKSTATION_IP" /etc/hosts
     sudo echo "$CHEF_WORKSTATION_IP  $CHEF_WORKSTATION_NAME $CHEF_WORKSTATION_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
 fi
 
-if ! grep -q "$CHEF_AUTOMATE_IP" /etc/hosts
+if ! grep -q "$CHEF_SERVER_IP" /etc/hosts
   then
-    sudo echo "$CHEF_AUTOMATE_IP  $CHEF_AUTOMATE_NAME $CHEF_AUTOMATE_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
+    sudo echo "$CHEF_SERVER_IP  $CHEF_SERVER_NAME $CHEF_SERVER_NAME.$CHEF_DOMAINNAME" | sudo tee -a /etc/hosts
 fi
 
 if ! grep -q "$CHEF_NODE1_IP" /etc/hosts
