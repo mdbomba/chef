@@ -1,6 +1,6 @@
-# Version 2024-01-08-10:07
+# Version 2024-01-25
 # Install Chef Workstation on dedicated server
-version='2024-01-24'
+version='2024-01-25'
 echo ''
 echo '#####################################################################'
 echo 'This script will install git, Visual Studio code and Chef Workstation'
@@ -12,14 +12,6 @@ cd ~
 
 STAMP=$(date +"_%Y%j%H%M%S")
 DEB=$(echo $CHEF_WORKSTATION_DOWNLOAD_URL | cut -d '/' -f 10)
-
-# CHECK AND LOAD PASSWORD IF NOT ALREADY DEFINED
-if [ "x$CHEF_ADMIN_PASSWORD" = "x" ] 
-  then
-    newValue=''
-    read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " newValue
-    CHEF_ADMIN_PASSWORD="$newValue"
-fi
 
 # SET HOSTNAME
 sudo hostnamectl set-hostname "$CHEF_WORKSTATION_NAME"
@@ -42,10 +34,9 @@ if ! grep -q "$CHEF_NODE1_IP" /etc/hosts
 fi
 echo ''
 
-# Adjust $PATH amdn make change permanent
+# Adjust $PATH and make change permanent
 export PATH="/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:$PATH" 
 echo 'export PATH="/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:$PATH"' >> ~/.bashrc   ; # Ensure bash PATH is updated permanently
-
 
 # Install curl
 sudo apt install curl -y
@@ -53,7 +44,10 @@ sudo apt install curl -y
 # Configure curl to use TLS1.2 or higher
 if [ -f ~/.curlrc ]
   then
-    echo '--tls1.2' | tee -a ~/.curlrc
+    if ! grep -q "tls1.2" ~/.curlrc
+      then 
+        echo '--tls1.2' | tee -a ~/.curlrc
+    fi        
   else
     echo '--tls1.2' > ~/.curlrc
 fi
@@ -95,8 +89,6 @@ fi
 
 # Install Visual Studio Code
 sudo apt install code -y                                                     ; # Install Visual Studio Code
-
-sudo apt update
 
 source ~/.bashrc                                                             ; # Import new PATH into current bash session
 
