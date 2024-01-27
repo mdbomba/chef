@@ -1,10 +1,10 @@
-# Version 20214-01-25
+# Version 20214-01-26
 # Install Automate Package on dedicated server
-version='2024-01-25'
+version='2024-01-26'
 echo ''
 echo '######################################################################'
 echo 'This script Chef Automare, Chef Inspec Server and Chef Habitat Builder'
-echo "On a single server name = $CHEF_AUTOMATE_NAME IP = CHEF_AUTOMATE_IP"
+echo "On a single server name = $CHEF_SERVER_NAME IP = $CHEF_SERVER_IP "
 echo "Version = $version"
 echo '######################################################################'
 echo ''
@@ -14,12 +14,12 @@ cd ~
 STAMP=$(date +"_%Y%j%H%M%S")
 
 # CHECK AND LOAD CHEF ADMIN USER PASSWORD IF NOT ALREADY DEFINED
-if [ "x$CHEF-ADMIN-PASSWORD" = "x" ] 
+if [ "x$CHEF_ADMIN_PASSWORD" = "x" ] 
   then
     newValue=''
     echo 'Chef Server created user accounts seperate from the linux OS accounts'
-    read -p  "Enter password for Chef Admin Account ($CHEF-SERVER-ADMIN): " newValue
-    CHEF-ADMIN-PASSWORD="$newValue"
+    read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " newValue
+    CHEF_ADMIN_PASSWORD="$newValue"
 fi
 
 # Set hostname
@@ -98,11 +98,11 @@ sudo ./chef-automate deploy --product builder --product automate --product infra
 echo 'eval "$(chef shell-init bash)"' >> ~/.bashrc
 sudo chef shell-init bash
 
-if [ -f "./$CHEF-SERVER-ADMIN.pem" ]
+if [ -f "./$CHEF_SERVER_ADMIN.pem" ]
   then
     :
   else
-  sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF-ADMIN-PASSWORD" --filename "$CHEF_ADMIN_ID.pem"
+  sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF_ADMIN_PASSWORD" --filename "$CHEF_ADMIN_ID.pem"
 fi
 
 if [ -f "./$CHEF_ORG-validator.pem" ]
@@ -111,9 +111,6 @@ if [ -f "./$CHEF_ORG-validator.pem" ]
   else
     sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
 fi
-
-
-
 
 echo ''
 echo '##############################################################################'
