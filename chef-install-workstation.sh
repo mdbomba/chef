@@ -1,6 +1,6 @@
-# Version 2024-01-25
+# Version 2024-01-26
 # Install Chef Workstation on dedicated server
-version='2024-01-25'
+version='2024-01-26'
 echo ''
 echo '#####################################################################'
 echo 'This script will install git, Visual Studio code and Chef Workstation'
@@ -107,8 +107,6 @@ sudo wget "$CHEF_WORKSTATION_DOWNLOAD_URL"                                   ; #
 # Install Chef Workstation
 sudo dpkg -i "$DEB"                                                          ; # Install Chef Workstation
 
-# Create git repo for Chef Workstation
-chef generate repo "$CHEF_GIT_REPO"                                           ; # Create first chef GIT_REPO 
 
 echo ''
 echo '#######################################################'
