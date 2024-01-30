@@ -1,19 +1,19 @@
-# Version 20240121
+# Version 20240129
 #
-chef-load-params-version='20240121'
+version='20240129'
 #
 # This script loads environmental variables related to Chef
 #
 echo 'This script will prompt for and load environmental variables related to the insallation and operations of Chef'
-echo "Version = $load-params-version"
+echo "Version = $version"
 echo ''
+#
+STAMP=$(date +"_%Y%j%H%M%S")
+OUT="$HOME/OUT$STAMP"
 #
 # Create function to set environment variables for Chef installs
 # usage is  $ loadEnvironment 'variablename' 'value'
 #
-STAMP=$(date +"_%Y%j%H%M%S")
-OUT="$HOME/OUT$STAMP"
-
 loadEnvironment() { 
 newalue=''  
 if [ "x$1" = "x" ] || [ "x$2" = 'x' ]
@@ -30,12 +30,16 @@ if [ "x$1" = "x" ] || [ "x$2" = 'x' ]
 fi
 }
 
+#
+# Create function to update /etc/hosts file with chef componnets
+# usage is  $ loadHost 'ip address' 'hostname' 'domainname'
+#
 loadHost() {
 if [ "x$1" = "x" ] || [ "x$2" = 'x' ] || [ "x$3" = "x" ]
   then 
-    echo "function loadHost requires 3 arguments IP-Address | hostname | domainname "
-    echo "Example is  $  loadHost '10.0.0.5' 'chef-workstation' 'localhost' "
-    return
+    echo "function loadHost requires 3 arguments" 
+    echo "usage is  $ loadHost 'ip address' 'hostname' 'domainname'"
+     return
   else 
     if ! grep -q "$1" /etc/hosts 
       then 
@@ -70,8 +74,8 @@ loadEnvironment 'CHEF_AUTOMATE_IP' '10.0.0.7'                   ; # Collect Chef
 loadEnvironment 'CHEF_NODE1_NAME' 'chef-node1'                  ; # Collect Chef Node 1 Name
 loadEnvironment 'CHEF_NODE1_IP' '10.0.0.8'                      ; # Collect Chef Node 1 IP address
 
-loadEnvironment 'CHEF_NODE2_NAME' 'chef-node1'                  ; # Collect Chef Node 1 Name
-loadEnvironment 'CHEF_NODE2_IP' '10.0.0.8'                      ; # Collect Chef Node 1 IP address
+loadEnvironment 'CHEF_NODE2_NAME' 'chef-node2'                  ; # Collect Chef Node 2 Name
+loadEnvironment 'CHEF_NODE2_IP' '10.0.0.9'                      ; # Collect Chef Node 2 IP address
 
 . ~/.bashrc
 
