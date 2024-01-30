@@ -3,15 +3,16 @@
 version='20240129'
 echo ''
 echo '#####################################################################'
-echo 'This script will install git, Visual Studio code and Chef Workstation'
-echo "Version = $version"
+echo 'This script will install Chef Workstation'
+echo "Script Version = $version"
 echo '#####################################################################'
 echo ''
 
 cd ~
 
 STAMP=$(date +"_%Y%j%H%M%S")
-DEB=$(echo $CHEF_WORKSTATION_DOWNLOAD_URL | cut -d '/' -f 10)
+URL="https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb"
+DEB='./chef-workstation_21.10.640-1_amd64.deb'
 
 # SET HOSTNAME
 sudo hostnamectl set-hostname "$CHEF_WORKSTATION_NAME.$CHEF_DOMAINNAME"
@@ -21,13 +22,14 @@ sudo echo "$CHEF_WORKSTATION_NAME.$CHEF_DOMAINNAME" > /etc/hostname
 export PATH="/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:$PATH" 
 echo 'export PATH="/opt/chef-workstation/bin:/opt/chef-workstation/embedded/bin:$PATH"' >> ~/.bashrc
 
-source ~/.bashrc                                                             ; # Import new PATH into current bash session
+# Import new PATH into current bash session
+source ~/.bashrc
 
 # Download Chef Workstation deb install package
-sudo wget "$CHEF_WORKSTATION_DOWNLOAD_URL"                                   ; # Download Chef Workstation package
+sudo wget "$URL"
 
 # Install Chef Workstation
-sudo dpkg -i "$DEB"                                                          ; # Install Chef Workstation
+sudo dpkg -i "$DEB"
 
 echo ''
 echo '#######################################################'

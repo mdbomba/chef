@@ -115,21 +115,22 @@ sudo git install openssh-server -y
 sudo apt install software-properties-common apt-transport-https wget -y
 
 # Add Repo for Microsoft Visual Studio Code
-if [ ! -f /usr/share/keyrings/vscode.gpg ]
-  then
-    echo "################### GET CODE SIGNING KEY FOR VISUAL STUDIO CODE ############################"
-    sudo wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg
-fi
+if ! which 'code' | grep -q -w '/usr/bin/code' - ; then 
+  if [ ! -f /usr/share/keyrings/vscode.gpg ]
+    then
+      echo "################### GET CODE SIGNING KEY FOR VISUAL STUDIO CODE ############################"
+      sudo wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg
+  fi
 
-if [ ! -f /etc/apt/sources.list.d/vscode.list ]
-  then
-    echo "################################## ADDING VISUAL STUDIO CODE GIT_REPOSITORY TO APT STORE ###########################"
-    echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+  if [ ! -f /etc/apt/sources.list.d/vscode.list ]
+    then
+      echo "################################## ADDING VISUAL STUDIO CODE GIT_REPOSITORY TO APT STORE ###########################"
+      echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+  fi
+  # Install Visual Studio Code
+  sudo apt update
+  sudo apt install code -y
 fi
-
-# Install Visual Studio Code
-sudo apt update
-sudo apt install code -y
 
 
 
