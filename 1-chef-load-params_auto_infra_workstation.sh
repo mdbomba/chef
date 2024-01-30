@@ -9,7 +9,6 @@ echo "Version = $version"
 echo ''
 #
 STAMP=$(date +"_%Y%j%H%M%S")
-OUT="$HOME/OUT$STAMP"
 #
 # Create function to set environment variables for Chef installs
 # usage is  $ loadEnvironment 'variablename' 'value'
@@ -22,6 +21,7 @@ if [ "x$1" = "x" ] || [ "x$2" = 'x' ]
     echo "Example is  $  loadEnvironment 'CHEF_ADMIN_ID' 'mike' "
     return
   else 
+    OUT="$HOME/OUT$STAMP"
     newValue=$2
     export $1=$newValue
     sed "/$1/d" ~/.bashrc | tee "$OUT" >>/dev/null; cp "$OUT" ~/.bashrc; rm "$OUT"
@@ -88,13 +88,48 @@ loadHost "$CHEF_NODE1_IP" "$CHEF_NODE1_NAME" "$CHEF_DOMAINNAME"
 loadHost "$CHEF_NODE2_IP" "$CHEF_NODE2_NAME" "$CHEF_DOMAINNAME"
 
 # apparmor can cause issues with Chef Server(s), so below will remove apparmor
-sudo apt remove apparmor
+sudo apt remove apparmor -y
 
 # git is used for most chef components
-sudo apt install git
+sudo apt install git -y
+git config --global user.name "$CHEF_GIT_USER"
+git config --global user.email "$CHEF_GIT_EMAIL"
 
 # curl is used across all chef components
-sudo apt install curl
-touch ~./.curlrc ; echo '--tls1.2' >> ~/.curlrc ; echo '--insecure' >> ~/.curlrc
+sudo apt install curl -y
+sed '/tls1.2/d' ~/.curlrc > ~/.curlrc
+sed '/insecure/d' ~/.curlrc > ~/.curlrc
+echo "--tls1.2" >> ~/.curlrc
+echo '--insecure' >> ~/.curlrc
 
-# 
+# Install tree (pretty version of "ls -lr" command )
+sudo apt install tree -y
+
+# Install gzip
+sudo apt install gzip -y
+
+# Ensure openssh-server is installed
+sudo git install openssh-server -y
+
+# Install additional tools
+sudo apt install software-properties-common apt-transport-https wget -y
+
+# Add Repo for Microsoft Visual Studio Code
+if [ ! -f /usr/share/keyrings/vscode.gpg ]
+  then
+    echo "################### GET CODE SIGNING KEY FOR VISUAL STUDIO CODE ############################"
+    sudo wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg
+fi
+
+if [ ! -f /etc/apt/sources.list.d/vscode.list ]
+  then
+    echo "################################## ADDING VISUAL STUDIO CODE GIT_REPOSITORY TO APT STORE ###########################"
+    echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+fi
+
+# Install Visual Studio Code
+sudo apt update
+sudo apt install code -y
+
+
+
