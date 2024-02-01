@@ -1,6 +1,6 @@
-# Version 20240129
+# Version 20240201
 #
-version='20240129'
+version='20240201'
 #
 # This script loads environmental variables related to Chef
 #
@@ -65,7 +65,7 @@ loadEnvironment 'CHEF_ADMIN_EMAIL' 'mike.bomba@progress.com'    ; # Collect Chef
 loadEnvironment 'CHEF_WORKSTATION_NAME' 'chef-workstation'      ; # Collect Chef Workstation name (lowercase)
 loadEnvironment 'CHEF_WORKSTATION_IP' '10.0.0.5'                ; # Collect Chef Workstation IP address
 
-loadEnvironment 'CHEF_INFRA_NAME' 'chef-automate'               ; # Collect Chef Infra Server Name (lowercase)
+loadEnvironment 'CHEF_INFRA_NAME' 'chef-infra'                  ; # Collect Chef Infra Server Name (lowercase)
 loadEnvironment 'CHEF_INFRA_IP' '10.0.0.6'                      ; # Collect Chef Infra Server IP address
 
 loadEnvironment 'CHEF_AUTOMATE_NAME' 'chef-automate'            ; # Collect Chef Automate Server Name (lowercase)
@@ -97,9 +97,9 @@ git config --global user.email "$CHEF_GIT_EMAIL"
 
 # curl is used across all chef components
 sudo apt install curl -y
-sed '/tls1.2/d' ~/.curlrc > ~/.curlrc
+sed '/tlsv1.2/d' ~/.curlrc > ~/.curlrc
 sed '/insecure/d' ~/.curlrc > ~/.curlrc
-echo "--tls1.2" >> ~/.curlrc
+echo "--tlsv1.2" >> ~/.curlrc
 echo '--insecure' >> ~/.curlrc
 
 # Install tree (pretty version of "ls -lr" command )
