@@ -10,12 +10,14 @@ environmental variables (appended to ~/.bashrc) that can then we used in various
 normally reads (e.g. config.toml). They will aslo be used in the chef-install-workstation.sh and chef-install-automate.sh 
 scripts. 
 
+It is recommended you download install.sh from https://omnitruck.chef.io/install.sh (e.g. wget -o "install.sh" https://omnitruck.chef.io/install.sh)
+
 It is recommended you create or have available a github account before running the install scripts. 
 
 Step 1 Build 2 x Ubuntu 22 server and 1 x Ubuntu 22 workstation
 Step 2 Download this repo to the server and workstation
-Step 3 Edit the chef-load-params.sh script to set values for your organization (on both server and workstation)
-Step 4 Run chef-load-params.sh script on both workstation and server
-Step 5 Run chef-install-automate.sh on Ubuntu server
-Step 6 Run chef-install-workstation.sh on Ubuntu workstation (Ubuntu server also works well as a chef-workstation)
-
+Step 3 Edit the prep.sh script to set values for your organization (on both server and workstation)
+Step 4 Run prep.sh script on chef workstation, chef server, and optionally on chef nodes.
+Step 5 Run install-server.sh on Ubuntu server
+Step 6 Run install-workstation.sh on Ubuntu workstation (workstation needs a graplical user interface)
+Step 7 Run install.sh without any arguments on Chef Nodes (managed endpoints)
