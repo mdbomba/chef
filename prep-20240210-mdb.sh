@@ -144,21 +144,23 @@ if [ ! command -v gzip ]; then
   echo ''; echo "INSTALLING gzip"
   sudo apt install gzip -y
 fi
+# Install openssh-server
+if ! test `apt-cache pkgnames | grep 'openssh-server'`; then
+  echo ''
+  echo "INSTALLING openssh-server"
+  sudo apt install openssh-server
+fi
+
 # ADD PACKAGES IF NODE IP = CHEF WORKSTATION OR CHEF SERVER
-#
 if test `hostname -i | cut -d ' ' -f 1 | cut -d '.' -f1` = '127' ; then myip=`hostname -i | cut -d ' ' -f 2` ; fi
-doit=0
-if test "$myip" = "$CHEF_WORKSTATION_IP"; then echo ''; echo "SCRIPT RUNNING ON CHEF WORKSTATION" ; doit=1; fi
-if test "$myip" = "$CHEF_SERVER_IP"; then echo ''; echo "SCRIPT RUNNING ON CHEF SERVER" ; doit=1; fi
-#
-if test "$doit" = "1"; then
-  # Install Microsoft Visual Studio Code
+if test "$myip" = "$CHEF_WORKSTATION_IP"; then 
+  echo ''
+  echo "SCRIPT RUNNING ON CHEF WORKSTATION" ; 
   if [ ! command -v code ]; then
     echo ''; echo "INSTALLING Microsoft Visual Studio Code"
     sudo wget -O 'code.deb' 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
     sudo dpkg -i code.deb
   fi
-
 fi
 
 
