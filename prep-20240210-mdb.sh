@@ -45,6 +45,10 @@ echo "CHEF_ORG='chef-demo'"                         >> ~/.chefparams
 echo "export CHEF_ORG"                              >> ~/.chefparams
 echo "CHEF_ORG_LONG='Chef Demo Organization'"       >> ~/.chefparams
 echo "export CHEF_ORG_LONG"                         >> ~/.chefparams
+echo "CHEF_GIT_USER='mdbomba'"                      >> ~/.chefparams
+echo "export CHEF_GIT_USER"                         >> ~/.chefparams
+echo "CHEF_GIT_EMAIL='mbomba@kemptechnologies.com'" >> ~/.chefparams
+echo "export CHEF_GIT_EMAIL"                        >> ~/.chefparams
 echo '# URL TO DOWNLOAD Chef Workstation deb file'  >> ~/.chefparams
 echo "URL_WORKSTATION='https://packages.chef.io/files/stable/chef-workstation/23.12.1055/ubuntu/22.04/chef-workstation_23.12.1055-1_amd64.deb'"    >> ~/.chefparams
 echo "export URL_WORKSTATION"                       >> ~/.chefparams
@@ -148,7 +152,7 @@ fi
 if ! test `apt-cache pkgnames | grep 'openssh-server'`; then
   echo ''
   echo "INSTALLING openssh-server"
-  sudo apt install openssh-server
+  sudo apt install openssh-server -y
 fi
 
 # ADD PACKAGES IF NODE IP = CHEF WORKSTATION OR CHEF SERVER
@@ -161,7 +165,23 @@ if test "$myip" = "$CHEF_WORKSTATION_IP"; then
     sudo wget -O 'code.deb' 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
     sudo dpkg -i code.deb
   fi
+  if [ ! command -v git ]; then
+    sudo apt install git -y
+  fi
+  # Congigure git
+  git config --global user.name  "$CHEF_GIT_USER"
+  git config --global user.email "$CHEF_GIT_EMAIL"
+
+  ## Install additional tools
+  echo ''
+  echo 'INSTALLING software-properties-common, apt-transport-https, and wget'
+  sudo apt install software-properties-common apt-transport-https wget -y
 fi
 
+echo ''
+echo 'To complete installation, use one of the following scripts'
+echo '    - install-server             (this will install Chef Automate + Infra Server + Insec Server + Habitat Builder)'
+echo '    - install-workstation        (this will install Chef Workstation)' 
+echo '    - install client             (this will install Chef Client software on a node to be managed - i.e. a Chef Node)'
 
 # END OF SCRIPT
