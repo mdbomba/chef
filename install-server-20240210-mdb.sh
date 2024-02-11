@@ -55,6 +55,7 @@ echo 'eval "$(chef shell-init bash)"' >> ~/.bashrc
 echo 'eval "$(chef shell-init bash)"' >> ~/.chefparams
 
 . ~/.bashrc
+. ~/.chefparams
 
 #######################
 # INITIAL CONFIGURATION
@@ -63,7 +64,7 @@ echo 'eval "$(chef shell-init bash)"' >> ~/.chefparams
 # CREATE FIRST USER
 sudo chef-server-ctl create-user "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF_ADMIN_PASSWORD" --filename "$CHEF_ADMIN_ID.pem"
 
-# CREATE FIIRST ORGANIZATION
+# CREATE FIRST ORGANIZATION
 sudo chef-server-ctl org-create "$CHEF_ORG_NAME" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
 
 ###################################################################
