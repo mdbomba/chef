@@ -14,7 +14,10 @@ It is recommended you download install.sh from https://omnitruck.chef.io/install
 
 It is recommended you create or have available a github account before running the install scripts. 
 
-Step 1 Build 2 x Ubuntu 22 server and 1 x Ubuntu 22 workstation
+Step 1 Build servers: 
+    1 x Ubuntu 22 server (100G disk, 8G ram, 4cores) for Chef Server (automate + infra + habitat + inspec)
+    1 x Ubuntu 22 workstation (20G disk, 4G ram, 2cores) for Chef Workstation 
+    2 x Ubuntu 22 server (20G disk, 4G ram, 2cores) for Chef Linux Nodes
 Step 2 Download this repo to the server and workstation
 Step 3 Edit the prep.sh script to set values for your organization (on both server and workstation)
 Step 4 Run prep.sh script on chef workstation, chef server, and optionally on chef nodes.
