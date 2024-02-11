@@ -20,4 +20,4 @@ Step 3 Edit the prep.sh script to set values for your organization (on both serv
 Step 4 Run prep.sh script on chef workstation, chef server, and optionally on chef nodes.
 Step 5 Run install-server.sh on Ubuntu server
 Step 6 Run install-workstation.sh on Ubuntu workstation (workstation needs a graplical user interface)
-Step 7 Run install.sh without any arguments on Chef Nodes (managed endpoints)
+Step 7 Run install-node.sh on Chef Nodes (managed endpoints)
