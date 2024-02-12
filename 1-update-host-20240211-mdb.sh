@@ -42,6 +42,8 @@ echo "CHEF_NODE2_NAME='chef-node2'"                 >> ~/.chefparams
 echo "export CHEF_NODE2_NAME"                       >> ~/.chefparams
 echo "CHEF_NODE2_IP='192.168.56.7'"                 >> ~/.chefparams
 echo "export CHEF_NODE2_IP"                         >> ~/.chefparams
+echo "CHEF_REPO='chef-repo'"                         >> ~/.chefparams
+echo "export CHEF_REPO"                              >> ~/.chefparams
 echo "CHEF_ORG='chef-demo'"                         >> ~/.chefparams
 echo "export CHEF_ORG"                              >> ~/.chefparams
 echo "CHEF_ORG_LONG='Chef Demo Organization'"       >> ~/.chefparams
