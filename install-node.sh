@@ -1,28 +1,13 @@
-version=20240211
-# Version 20240211
+version=20240311
+# Version 20240311
 #!/bin/bash -xe
 #
-# !!! Policy Name and Policy Group need to be preconfigured on the chef server !!!
-#
-# Run prep.sh script before running bootstrap.sh
-#   -  prep.sh will update hosts file with chef components
-#   -  prep.sh will create a series of environmental variables to support script automation
-#   -  prep.sh will download and implement the demo ssh validator key
-#   -  prep.sh will install various dependent applications
-#
-# bootstrap.sh script will do the following
-#   -  create required working directories
-#   -  download the organization pem file to /etc/chef
-#   -  dowload the install.sh script
-#   -  create a first-boot.json for initial chef-client execution
-#   -  create a client.rb file
-#   -  install the chef client and register the node with the chef server
-# 
-
-# Load chef parameters
-if test -f ~/.chefparams ; then source ~/.chefparams 
-  else echo "This script requires a ~/.chefparams file created by prep.sh. Please edit and run prep.sh. Exiting script."; exit
-fi
+############
+# PARAMETERS
+############
+CHEF_ADMIN_ID='chef'
+CHEF_SERVER_NAME='chef-server'
+CHEF_ORG='progress'
 
 # Do some chef pre-work
 if [ ! -d /etc/chef ];     then `sudo mkdir /etc/chef`; fi
