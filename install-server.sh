@@ -8,7 +8,7 @@ CHEF_ADMIN_ID='chef'
 CHEF_ADMIN_FIRT='Chef'
 CHEF_ADMIN_LAST='Admin'
 CHEF_ADMIN_EMAIL='chef.admin@kemptech.biz'
-CHEF_ADMIN_PASS='devsecops'
+read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " CHEF_ADMIN_PASS
 CHEF_ORG='progress'
 CHEF_ORG_LONG="Progress Software"
 
