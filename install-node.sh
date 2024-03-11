@@ -1,6 +1,5 @@
-version=20240311
-# Version 20240311
 #!/bin/bash -xe
+# Version 20240311
 #
 ############
 # PARAMETERS
