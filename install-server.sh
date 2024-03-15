@@ -1,11 +1,11 @@
 #!/bin/bash -xe
-# Version 20240311
+# Version 20240315
 #
 ##################
 # SET PARAMETERS
 #################
 CHEF_ADMIN_ID='chef'
-CHEF_ADMIN_FIRT='Chef'
+CHEF_ADMIN_FIRST='Chef'
 CHEF_ADMIN_LAST='Admin'
 CHEF_ADMIN_EMAIL='chef.admin@kemptech.biz'
 read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " CHEF_ADMIN_PASS
@@ -32,8 +32,8 @@ sudo  sysctl -w vm.dirty_expire_centisecs=20000
 curl https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip | gunzip - > chef-automate && chmod +x chef-automate
 sudo ./chef-automate deploy --product automate --product infra-server
 sudo chef-automate init-config
-sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF_ADMIN_PASS" --filename "$CHEF_ADMIN_ID.pem"
-sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
+sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF_ADMIN_PASS" --filename "$CHEF_ADMIN_ID"".pem"
+sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG""-validator.pem"
 
 ###########################
 # CREATE SSL KEY
