@@ -1,5 +1,5 @@
 #!/bin/bash -xe
-# Version 20240315
+# Version 20240317
 #
 ##################
 # SET PARAMETERS
@@ -35,8 +35,4 @@ sudo chef-automate init-config
 sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF_ADMIN_PASS" --filename "$CHEF_ADMIN_ID"".pem"
 sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG""-validator.pem"
 
-###########################
-# CREATE SSL KEY
-###########################
-ssh-keygen -b 4092 -f ~/.ssh/id_rsa -N '' >> /dev/null
 

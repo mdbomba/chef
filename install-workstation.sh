@@ -1,9 +1,10 @@
 #!/bin/bash -xe
-# Version 20240311
+# Version 20240317
 #
 ####################
 # SCRIPT PARAMETERS
 ####################
+CHEF_REPO='chef_repo'
 CHEF_ADMIN_ID='chef'
 CHEF_ORG='progress'
 CHEF_SERVER_NAME='chef-server'
@@ -34,6 +35,7 @@ echo "[default]
 client_name     = '$CHEF_ADMIN_ID'
 client_key      = '/home/$CHEF_ADMIN_ID/.chef/$CHEF_ADMIN_ID.pem'
 chef_server_url = 'https://$CHEF_SERVER_NAME/organizations/$CHEF_ORG'
+cookbook_path  =  'home/$CHEF_ADMIN_ID/$CHEF_REPO'
 " > ~/.chef/credentials
 
 #############
@@ -46,7 +48,7 @@ echo 'eval "$(chef shell-init bash)"' | tee -a ~/.bashrc >> /dev/null
 ############################
 # GENERATE DEFAULT CHEF REPO
 ############################
-chef generate repo "chef-repo" --chef-license 'accept'
+chef generate repo "$CHEF_REPO" --chef-license 'accept'
 
 echo "###########################"
 echo "# CHEF WORKSTATION REBOOT #"
