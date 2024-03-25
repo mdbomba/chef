@@ -1,5 +1,5 @@
 #!/bin/bash
-# Version 20240322
+# Version 20240325
 # Author Mike Bomba
 # 
 ############
@@ -11,78 +11,34 @@
 # $tmp_dir: secure-ish temp directory that can be used during installation.
 ############
 
+usage='
+ERROR - usage is: download.sh -P [chef|chef-workstation|chef-server|automate] -c [current|stable] -v [version number]  (-P is mandatory)
+'
+# create a temp download dir
+tmp_dir="."
+if ! test -d $tmp_dir; then mkdir $tmp_dir; chmod 777 $tmp_dir; fi
+
 # Check whether a command exists - returns 0 if it does, 1 if it does not
 exists() {
-  if command -v $1 >/dev/null 2>&1
-  then
-    return 0
-  else
-    return 1
-  fi
+  if command -v $1 >/dev/null 2>&1; then return 0; else return 1; fi
 }
 
 # Output the instructions to report bug about this script
 report_bug() {
   echo "Version: $version"
   echo ""
-  echo "Please file a Bug Report at https://github.com/chef/omnitruck/issues/new"
-  echo "Alternatively, feel free to open a Support Ticket at https://www.chef.io/support/tickets"
-  echo "More Chef support resources can be found at https://www.chef.io/support"
-  echo ""
-  echo "Please include as many details about the problem as possible i.e., how to reproduce"
-  echo "the problem (if possible), type of the Operating System and its version, etc.,"
-  echo "and any other relevant details that might help us with troubleshooting."
+  echo " This is a custom script and not eligable for bug reporting to Chef"
   echo ""
 }
 
 checksum_mismatch() {
-  echo "Package checksum mismatch!"
+  echo "ERROR - Package checksum mismatch!"
   report_bug
-  exit 1
-}
-
-unable_to_retrieve_package() {
-  echo "Unable to retrieve a valid package!"
-  report_bug
-  echo "Metadata URL: $metadata_url"
-  if test "x$download_url" != "x"; then
-    echo "Download URL: $download_url"
-  fi
-  if test "x$stderr_results" != "x"; then
-    echo "\nDEBUG OUTPUT FOLLOWS:\n$stderr_results"
-  fi
   exit 1
 }
 
 http_404_error() {
-  echo "Omnitruck artifact does not exist for version $version on platform $platform"
-  echo ""
-  echo "Either this means:"
-  echo "   - We do not support $platform"
-  echo "   - We do not have an artifact for $version"
-  echo ""
-  echo "This is often the latter case due to running a prerelease or RC version of Chef"
-  echo "or a gem version which was only pushed to rubygems and not omnitruck."
-  echo ""
-  echo "You may be able to set your knife[:bootstrap_version] to the most recent stable"
-  echo "release of Chef to fix this problem (or the most recent stable major version number)."
-  echo ""
-  echo "In order to test the version parameter, adventurous users may take the Metadata URL"
-  echo "below and modify the '&v=<number>' parameter until you successfully get a URL that"
-  echo "does not 404 (e.g. via curl or wget).  You should be able to use '&v=11' or '&v=12'"
-  echo "successfully."
-  echo ""
-  echo "If you cannot fix this problem by setting the bootstrap_version, it probably means"
-  echo "that $platform is not supported."
-  echo ""
-  # deliberately do not call report_bug to suppress bug report noise.
-  echo "Metadata URL: $metadata_url"
-  if test "x$download_url" != "x"; then
-    echo "Download URL: $download_url"
-  fi
-  if test "x$stderr_results" != "x"; then
-    echo "\nDEBUG OUTPUT FOLLOWS:\n$stderr_results"
-  fi
+  echo "ERROR - Omnitruck artifact does not exist for $platfoorm and $version or $channel"
   exit 1
 }
 
@@ -97,7 +53,6 @@ capture_tmp_stderr() {
 
 # do_wget URL FILENAME
 do_wget() {
-  echo "Downloading to $2"
   wget -q --user-agent="User-Agent: mixlib-install/3.12.30" -O "$2" "$1"
   test $? -ne 0 && return 1
   return 0
@@ -105,7 +60,6 @@ do_wget() {
 
 # do_curl URL FILENAME
 do_curl() {
-  echo "Downloading to $2"
   curl -A "User-Agent: mixlib-install/3.12.30" --retry 5 -sL "$1" > "$2"
   test $? -ne 0 && return 1
   return 0
@@ -113,7 +67,6 @@ do_curl() {
 
 # do_fetch URL FILENAME
 do_fetch() {
-  echo "Downloading to $2"
   fetch --user-agent="User-Agent: mixlib-install/3.12.30" -o "$2" "$1" 
   test $? -ne 0 && return 1
   return 0
@@ -122,15 +75,12 @@ do_fetch() {
 # returns 0 if checksums match
 do_checksum() {
   if exists sha256sum; then
-    echo "Validating file sha256 checksum"
     checksum=`sha256sum $1 | awk '{ print $1 }'`
     return `test "x$checksum" = "x$2"`
   elif exists shasum; then
-    echo "Validating file sha checksum"
     checksum=`shasum -a 256 $1 | awk '{ print $1 }'`
     return `test "x$checksum" = "x$2"`
   else
-    echo "WARNING: could not find a valid checksum program, pre-install shasum or sha256sum in your O/S image to get validation..."
     return 0
   fi
 }
@@ -138,25 +88,11 @@ do_checksum() {
 # do_download URL FILENAME
 do_download() {
   url=`echo $1`
-  if exists wget; then
-    do_wget $url $2 && return 0
-  fi
-
-  if exists curl; then
-    do_curl $url $2 && return 0
-  fi
-
-  if exists fetch; then
-    do_fetch $url $2 && return 0
-  fi
-
-  unable_to_retrieve_package
+  if exists wget; then do_wget $url $2; return 0; fi
+  if exists curl; then do_curl $url $2; return 0; fi
+  if exists fetch; then do_fetch $url $2; return 0; fi
+  echo "ERROR - unable_to_retrieve_package"
 }
-
-# secure-ish temp dir creation without having mktemp available (DDoS-able but not exploitable)
-if test "x$TMPDIR" = "x"; then tmp="/tmp"; else tmp=$TMPDIR; fi
-tmp_dir="$tmp/download.$$"
-if ! test -d $tmp_dir; then mkdir $tmp_dir; chmod 777 $tmp_dir; fi
 
 ############
 # end of function declarations
@@ -281,16 +217,15 @@ do
   esac
 done
 shift `expr $OPTIND - 1`
+############
+# end read command line arguments
+############
 
 echo "#################################"
 echo " SCRIT TO DOWNLOAD CHEF SOFTWARE "
 echo "#################################"
 echo ""
-echo "usage: $0 [-P project] [-c release_channel] [-v version]"
-echo "                       -P is required, -c and -v are optional"
-echo ""
-if [ "x$project" = "x" ]; then echo "Script missing required command line option"; echo "  -P [chef|chef-workstation|chef-server|automate|inspec|supermarket]";echo ""; exit; fi
-echo ""
+if [ "x$project" = "x" ]; then echo "${usage}";  exit; fi
 
 ############
 # end read command line arguments
@@ -301,10 +236,11 @@ echo ""
 ############
 if [ "$project" = "automate" ]; then
   download_filename="$tmp_dir/chef-automate"
-  echo "Package name = automate"
-  echo "Download file = $download_filename"
-  echo ""
-  curl "https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip" | gunzip - > "$download_filename" && chmod +x "$download_filename"
+  download_url="https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip"
+  echo "Chef component name = automate"
+  echo "Chef component channel = current"
+  echo "Chef component download file = $download_filename"
+  curl -A "User-Agent: mixlib-install/3.12.30" --retry 5 -sL "${download_url}" | gunzip - > "$download_filename" && chmod +x "$download_filename"
   echo ""
   echo "######################"
   echo "     END OF SCRIPT    "
@@ -316,7 +252,7 @@ fi
 ############
 
 ############
-# start fetch_metadata (url, sha256hash)
+# start fetch metadata (url, sha256hash)
 ############
 # This section calls omnitruck to get the information about the build to be
 #   installed.
@@ -338,27 +274,20 @@ fi
 metadata_filename="$tmp_dir/metadata.txt"
 metadata_url="https://omnitruck.chef.io/$channel/$project/metadata?v=$version&p=$platform&pv=$platform_version&m=$machine"
 do_download "$metadata_url" "$metadata_filename"
-
-  # check that all the mandatory fields in the downloaded metadata are there
-  if grep '^url' $metadata_filename > /dev/null && grep '^sha256' $metadata_filename > /dev/null; then
-    echo "downloaded metadata file looks valid..."
-  else
-    echo "downloaded metadata file is corrupted or an uncaught error was encountered in downloading the file..."
-    # this generally means one of the download methods downloaded a 404 or something like that and then reported a successful exit code,
-    # and this should be fixed in the function that was doing the download.
-    report_bug
-    exit 1
-  fi
-
 download_url=`cat $metadata_filename | grep -i 'url' | cut -f 2`
 sha256=`cat $metadata_filename | grep -i 'sha256' | cut -f 2`
 
-############
-# end of fetch_metadata
-############
+# check that all the mandatory fields in the downloaded metadata are there
+if [ "x${download_url}" = "x" ]; then echo "downloaded metadata file is corrupted or an uncaught error was encountered in downloading the file..."; exit 1; fi
+if [ "x${sha256}" = "x" ]; then echo "downloaded metadata file is corrupted or an uncaught error was encountered in downloading the file..."; exit 1; fi
+
 
 ############
-# start fetch_package
+# end fetch metadata
+############
+
+############ 
+# start fetch package
 ############
 # This section fetches a package from $download_url and verifies its metadata.
 #
@@ -393,8 +322,9 @@ if test "x$verify_checksum" = "xtrue"; then
 fi
 
 ############
-# end of fetch_package.sh
+# end fetch package
 ############
+
 echo ""
 echo "######################"
 echo "     END OF SCRIPT    "
