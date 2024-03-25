@@ -1,4 +1,9 @@
-# version='20240317'
+#!/bin/bash
+# Version 20240325
+
+# Vistual Studio Code download links
+# https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64
+# https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64
 #
 CHEF_GIT_USER='mbomba'
 CHEF_GIT_EMAIL='mbomba@kemptechnologies.com'
