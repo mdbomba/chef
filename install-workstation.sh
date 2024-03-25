@@ -1,6 +1,6 @@
 #!/bin/bash -xe
-# Version 20240317
-#
+# Version 20240325
+
 ####################
 # SCRIPT PARAMETERS
 ####################
@@ -14,15 +14,16 @@ RPM_URL='https://packages.chef.io/files/stable/chef-workstation/21.10.640/el/8/c
 ##########################
 # DETERMINE LINUX VARIENT
 ##########################
-if test -f /etc/lsb-release; then . /etc/lsb-release; fi
-if [ "x$DISTRIB_ID" = "xUbuntu" ] || [ "x$DISTRIB_ID" = "xLinuxMint" ]; then URL="$DEB_URL"; else URL="$RPM_URL"; fi
+if test -f /etc/os-release; then . /etc/os-release; fi
+if [ "x$ID" = "xubuntu" ] || [ "x$ID" = "xlinuxmint" ] || [ "x$ID" = "xdebian" ]; then URL="$DEB_URL"; else URL="$RPM_URL"; fi
+if [ "x$ID" = "x" ]; then echo "Cannot determine OS variant. Terminating script"; exit; fi
 PKG=`echo $URL | cut -d "/" -f 10`
 
 ########################################
 # DOWNLOAD AND INSTALL CHEF WORKSTATION
 ########################################
 wget -O "$PKG" "$URL"
-if test "x$DISTRIB_ID" = "xUbuntu"
+if [ "x$ID" = "xubuntu" ] || [ "x$ID" = "xlinuxmint" ] || [ "x$ID" = "xdebian" ]
   then sudo dpkg -i "$PKG"
   else sudo yum localinstall "$PKG"
 fi
@@ -57,6 +58,3 @@ echo '###########################'
 echo "Script will automatically reboot server now"
 read -p "Press Enter to reboot, CTRL-C to abort reboot" REBOOT
 shutdown -r now
-
-
-
