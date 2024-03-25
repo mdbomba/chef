@@ -1,5 +1,5 @@
 #!/bin/bash -xe
-# Version 20240325
+# Version 20240325.1
 
 ####################
 # SCRIPT PARAMETERS
@@ -33,10 +33,12 @@ fi
 #########################
 if ! test -d ~/.chef; then mkdir ~/.chef; fi
 echo "[default]
-client_name     = '$CHEF_ADMIN_ID'
-client_key      = '/home/$CHEF_ADMIN_ID/.chef/$CHEF_ADMIN_ID.pem'
+client_name = '$CHEF_ADMIN_ID'
+client_key = '/home/$CHEF_ADMIN_ID/.chef/$CHEF_ADMIN_ID.pem'
+validation_client_name = '$CHEF_ORG-validator'
+validation_key = '/home/$CHEF_ADMIN_ID/.chef/$CHEF_ORG-validator.pem'
 chef_server_url = 'https://$CHEF_SERVER_NAME/organizations/$CHEF_ORG'
-cookbook_path  =  'home/$CHEF_ADMIN_ID/$CHEF_REPO'
+cookbook_path  =  ['/home/$CHEF_ADMIN_ID/$CHEF_REPO']
 " > ~/.chef/credentials
 
 #############
@@ -55,6 +57,12 @@ echo "###########################"
 echo "# CHEF WORKSTATION REBOOT #"
 echo '###########################'
 
+echo ''
+echo "After reboot ensure $CHEF_ADMIN_ID.pem and $CHEF_ORG-validator.pem are copied"
+echo "from chef server to ~/.chef directory"
+echo ''
+echo 'Please also run "knife ssl fetch" to pull chef automate server ssl cert'
+echo ''
 echo "Script will automatically reboot server now"
 read -p "Press Enter to reboot, CTRL-C to abort reboot" REBOOT
 shutdown -r now
