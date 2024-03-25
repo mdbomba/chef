@@ -1,9 +1,9 @@
-#!/bin/bash -xe
-# Version 20240317
+#!/bin/bash
+# Version 20240325
 #
-##################
-# SET PARAMETERS
-#################
+###############################
+# PLEASE EDIT PARAMETERS BELOW
+###############################
 CHEF_ADMIN_ID='chef'
 CHEF_ADMIN_FIRST='Chef'
 CHEF_ADMIN_LAST='Admin'
@@ -34,5 +34,4 @@ sudo ./chef-automate deploy --product automate --product infra-server
 sudo chef-automate init-config
 sudo chef-server-ctl user-create "$CHEF_ADMIN_ID" "$CHEF_ADMIN_FIRST" "$CHEF_ADMIN_LAST" "$CHEF_ADMIN_EMAIL" "$CHEF_ADMIN_PASS" --filename "$CHEF_ADMIN_ID"".pem"
 sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG""-validator.pem"
-
 
