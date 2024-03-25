@@ -43,7 +43,7 @@ cookbook_path  =  'home/$CHEF_ADMIN_ID/$CHEF_REPO'
 # UPDATE PATH
 #############
 PATH=/opt/chef-workstation/bin:$PATH
-chef shell-init bash
+chef shell-init bash --chef-license accept
 echo 'eval "$(chef shell-init bash)"' | tee -a ~/.bashrc >> /dev/null
 
 ############################
