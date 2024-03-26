@@ -1,5 +1,5 @@
 #!/bin/bash
-# Version 20240325
+# Version 20240326
 
 # Vistual Studio Code download links
 # https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64
@@ -23,6 +23,7 @@ sudo apt install software-properties-common -y
 sudo apt install apt-transport-https -y
 wget -O 'code.deb' 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
 sudo dpkg -i code.deb; rm code.deb
+sudo apt install vagrant -y
 #####################################
 # END LOAD APPLICATIONS SECTION
 #####################################
