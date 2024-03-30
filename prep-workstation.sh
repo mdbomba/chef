@@ -1,4 +1,4 @@
-# version='20240317'
+# version='20240329'
 #
 CHEF_GIT_USER='mbomba'
 CHEF_GIT_EMAIL='mbomba@kemptechnologies.com'
@@ -18,6 +18,7 @@ sudo apt install software-properties-common -y
 sudo apt install apt-transport-https -y
 wget -O 'code.deb' 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
 sudo dpkg -i code.deb; rm code.deb
+sudo apt install vagrant -y
 #####################################
 # END LOAD APPLICATIONS SECTION
 #####################################
