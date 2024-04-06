@@ -1,3 +1,4 @@
+#!/bin/bash +x 
 # version='20240406'
 #
 
@@ -7,7 +8,7 @@
 CHEF_GIT_USER='mdbomba'
 CHEF_GIT_EMAIL='mbomba@kemptechnologies.com'
 
-###################
+##################
 # PARAMETER CHECK
 ##################
 echo ''
