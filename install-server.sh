@@ -1,9 +1,9 @@
 #!/bin/bash +x
 # Version 20240406
 #
-##################
-# SET PARAMETERS
-#################
+#############
+# PARAMETERS
+#############
 CHEF_ADMIN_ID='chef'
 CHEF_ADMIN_FIRST='Chef'
 CHEF_ADMIN_LAST='Admin'
