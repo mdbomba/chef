@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash +x
 # WARNING: REQUIRES /bin/sh
 #
 # NONSTANDARD FILE _ USED ONLY FOR MIKE BOMBA GIT REPO
