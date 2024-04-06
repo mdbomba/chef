@@ -1,5 +1,9 @@
 # version='20240406'
 #
+
+#############
+# PARAMETERS
+#############
 CHEF_GIT_USER='mdbomba'
 CHEF_GIT_EMAIL='mbomba@kemptechnologies.com'
 
