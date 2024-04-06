@@ -1,9 +1,9 @@
 #!/bin/bash +x
 # Version 20240406
 #
-####################
-# SCRIPT PARAMETERS
-####################
+#############
+# PARAMETERS
+#############
 CHEF_ADMIN_ID='chef'
 CHEF_ORG='progress'
 CHEF_SERVER_NAME='server'
@@ -24,7 +24,7 @@ echo "    CHEF_SERVER_NAME = $CHEF_SERVER_NAME"
 echo "    CHEF_REPO = $CHEF_REPO"
 echo "    DEB_URL = $DEB_URL     ... INSTALL URL FOR chef-workstation_{version}.deb  "
 echo "    RPM_URL = $DEB_URL     ... INSTALL URL FOR chef-workstation_{version}.rpm  "
-read -p "Press any key to continue, CTRL-C to terminate and edit values" YN
+read -p "Press any key to continue, CTRL-C to terminate and edit parameter values" YN
 
 ##########################
 # DETERMINE LINUX VARIENT
