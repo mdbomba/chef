@@ -1,12 +1,28 @@
-#!/bin/bash -xe
-# Version 20240311
+#!/bin/bash +x
+# Version 20240406
 #
-############
+#############
 # PARAMETERS
-############
+#############
 CHEF_ADMIN_ID='chef'
 CHEF_SERVER_NAME='chef-server'
 CHEF_ORG='progress'
+POLICY_GROUP='dev'
+POLICY_NAME='base'
+
+###################
+# CHECK PARAMETERS
+###################
+echo ''
+echo 'THIS SCRIPT INSTALLS CHEF CLIENT ON A CHEF MANAGED NODE'
+echo 'YOU SHOULD EDIT THE PARAMETERS IN THIS SCRIPT BEFORE RUNNING IT'
+echo 'EXISTING PARAMETERS ARE:'
+echo "    CHEF_ADMIN_ID = $CHEF_ADMIN_ID"
+echo "    CHEF_SERVER_NAME = "$CHEF_SERVER_NAME"
+echo "    CHEF_ORG = $CHEF_ORG"
+echo "    POLICY_GROUP = $POLICY_GROUP"
+echo "    POLICY_NAME = $POLICY_NAME"
+read -p "Press Enter to continue, CTRL-C to abort and edit values" YN
 
 # Do some chef pre-work
 if [ ! -d /etc/chef ];     then `sudo mkdir /etc/chef`; fi
@@ -20,8 +36,8 @@ if [ ! -d ~/temp ];        then `mkdir ~/temp`; fi
 cd ~/temp
 cat > "./first-boot.json" << EOF
 {
-   "policy_group": "dev",
-   "policy_name": "base"
+   "policy_group": "$POLICY_GROUP",
+   "policy_name": "$POLICY_NAME"
 }
 EOF
 sudo cp -f first-boot.json /etc/chef/first-boot.json
