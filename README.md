@@ -17,3 +17,6 @@ Step 3 Edit each install=???? scrips to properly set parameters
 Step 5 Run install-server.sh on Ubuntu server
 Step 6 Run install-workstation.sh on Ubuntu workstation (workstation needs a graplical user interface)
 Step 7 Run install-node.sh on Chef Nodes (managed endpoints)
+
+Location of Chef Workstation for Windows install package
+https://packages.chef.io/files/stable/chef-workstation/24.2.1058/windows/2016/chef-workstation-24.2.1058-1-x64.msi'
