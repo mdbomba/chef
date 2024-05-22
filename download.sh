@@ -1,28 +1,13 @@
 #!/bin/bash
-# Version 20240325
+# Version 20240522
 # Author Mike Bomba
 # 
-############
-# start of function declaration
-############
-# This section has some helper functions to make life easier.
+# Script downloads chef install files for ubuntu and redhat based distros only
 #
-# Outputs:
-# $tmp_dir: secure-ish temp directory that can be used during installation.
-############
 
-############
-# start read command line arguments
-############
-# This section reads the CLI parameters for the install script and translates
-#   them to the local parameters to be used later by the script.
-#
-# Outputs:
-# $channel: (current or stable)
-# $project: (automate, chef-server, chef-workstation, chef, inspec, supermarket) 
-#  if [[ "$WORD" =~ ^(cat|dog|horse)$ ]]; then echo "$WORD ; fi
-# Defaults
-
+##############
+# Data input section
+##############
 platform=''
 while ! [[ "$platform" =~ ^(ubuntu|redhat)$ ]]; do read -p "Enter Distro Name (ubuntu, redhat): " platform; done
 
@@ -36,16 +21,16 @@ while ! [[ "$project" =~ ^(chef|chef-workstation|chef-server|automate|inspec|sup
 channel=''
 while ! [[ "$channel" =~ ^(current|stable)$ ]]; do read -p "Enter chef product channel (current, stable): " channel; done
 
+############
+# End of data input section
+############
+
 # Assign a download directory
 tmp_dir="." 
 
 # If tmp_dir does not exist, create it
 if ! test -d $tmp_dir; then mkdir $tmp_dir; chmod 777 $tmp_dir; fi
 
-# Check whether a command exists - returns 0 if it does, 1 if it does not
-exists() {
-  if command -v $1 >/dev/null 2>&1; then return 0; else return 1; fi
-}
 
 # normalize the architecture we detected
 machine=`uname -m`
@@ -73,14 +58,14 @@ os=`uname -s`
 if [ "$project" = "automate" ]; then
   download_filename="$tmp_dir/chef-automate"
   download_url="https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip"
-  echo "Chef component name = automate"
-  echo "Chef component channel = current"
-  echo "Chef component download file = $download_filename"
   curl -A "User-Agent: mixlib-install/3.12.30" --retry 5 -sL "${download_url}" | gunzip - > "$download_filename" && chmod +x "$download_filename"
+  wget --user-agent="User-Agent: mixlib-install/3.12.30" -O "automate_`date -I`.aib" https://packages.chef.io/airgap_bundle/current/automate/latest.aib
   echo ""
   echo "######################"
   echo "     END OF SCRIPT    "
   echo "######################"
+  echo ''
+  ls -l
   exit
 fi
 ############
@@ -135,4 +120,4 @@ echo "######################"
 # end of script
 ############
 echo ''
-ls -la
+ls -l
