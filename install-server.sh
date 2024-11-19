@@ -10,7 +10,7 @@ ADMIN_LAST='Chef'
 ADMIN_EMAIL='chef@kemptech.biz'
 ADMIN_PASS='devsecops'
 ORG='demoLab'
-ORG_LONG="Progress Software Demo Lab"
+ORG_LONG='Progress Software Demo Lab'
 
 #######################
 # ASK IF VALUES ARE OK
@@ -24,18 +24,18 @@ echo "    ADMIN_FIRST = $ADMIN_FIRST"
 echo "    ADMIN_LAST = $ADMIN_LAST"
 echo "    ADMIN_EMAIL = $ADMIN_EMAIL"
 echo "    ADMIN_PASS = $ADMIN_PASS"
-echo "    ORG_ = $ORG_"
-echo "    ORG__LONG = $ORG__LONG"
+echo "    ORG = $ORG"
+echo "    ORG_LONG = $ORG_LONG"
 read -p "Press any key to continue, CTRL-C to terminate and edit values" YN
-	
+
 ########################
 # UPDATE sysctl.conf
 ########################
 sudo grep -v "vm.max_map_count" /etc/sysctl.conf           | sudo tee ./temp1.tmp >/dev/null
 sudo grep -v "vm.dirty_expire_centisecs=" /etc/sysctl.conf | sudo tee -a ./temp1.tmp >/dev/null
-echo "vm.max_map_count=262144"         | sudo tee -a ./temp1.tmp
-echo "vm.dirty_expire_centisecs=20000" | sudo tee -a ./temp1.tmp
-sudo cp -f ./temp1.tmp /etc/sysctl.conf 
+echo "vm.max_map_count=262144"         | sudo tee -a ./temp1.tmp >/dev/null
+echo "vm.dirty_expire_centisecs=20000" | sudo tee -a ./temp1.tmp >/dev/null
+sudo cp -f ./temp1.tmp /etc/sysctl.conf
 
 ########################
 # UPDATE RUNNING CONFIG
@@ -46,9 +46,9 @@ sudo  sysctl -w vm.dirty_expire_centisecs=20000
 ##########################
 # CHECK FOR PREREQUISITES
 ##########################
-sudo apt install -y curl >/dev/null 2>&1 ; fi
-sudo apt install -y gzip >/dev/null 2>&1 ; fi
-sudo apt install -y openssh-server >/dev/null 2>&1 ; fi
+sudo apt install -y curl >/dev/null 2>&1
+sudo apt install -y gzip >/dev/null 2>&1
+sudo apt install -y openssh-server >/dev/null 2>&1
 
 #######################################################################
 # DOWNLOAD AND INSTALL CHEF SERVER (AUTOMATE + INFRA_SERVER + BUILDER)
@@ -66,5 +66,3 @@ fi
 ###############################################
 sudo chef-server-ctl user-create "$ADMIN" "$ADMIN_FIRST" "$ADMIN_LAST" "$ADMIN_EMAIL" "$ADMIN_PASS" --filename "$ADMIN"".pem"
 sudo chef-server-ctl org-create "$ORG" "$ORG_LONG" --association_user "$ADMIN" --filename "$ORG""-validator.pem"
-
-
